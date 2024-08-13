@@ -1,0 +1,36 @@
+---
+RecipeFormatVersion: "2020-01-25"
+ComponentName: "{COMPONENT_NAME}"
+ComponentVersion: "{COMPONENT_VERSION}"
+ComponentDescription: "Publish and subscribe using IPC operations through Docker."
+ComponentPublisher: "{COMPONENT_AUTHOR}"
+ComponentConfiguration:
+  DefaultConfiguration:
+    ROS2_TOPICS: "[]"
+    accessControl:
+      aws.greengrass.ipc.pubsub:
+        com.docker.{COMPONENT_NAME}:pubsub:1:
+          policyDescription: Allows access to publish and subscribe to topics starting with robots.
+          operations:
+            - aws.greengrass#SubscribeToTopic
+            - aws.greengrass#PublishToTopic
+          resources:
+            - "robots/*"
+ComponentDependencies:
+  aws.greengrass.DockerApplicationManager:
+    VersionRequirement: ~2.0.0
+  aws.greengrass.TokenExchangeService:
+    VersionRequirement: ~2.0.0
+Manifests:
+  - Platform:
+      os: all
+    Artifacts:
+      - URI: "docker:{ECR_REPO}/ros2-mqtt-converter:latest"
+      - URI: "s3://BUCKET_NAME/COMPONENT_NAME/COMPONENT_VERSION/io.github.mikelikesrobots.Ros2MqttConverter.zip"
+        Unarchive: ZIP
+    Lifecycle:
+      Run: 
+        RequiresPrivilege: True
+        Script: |
+          ROS2_TOPICS=$(jq -R -s '.' <<< '{configuration:/ROS2_TOPICS}') \
+          docker compose -f {artifacts:decompressedPath}/io.github.mikelikesrobots.Ros2MqttConverter/docker-compose.yml up

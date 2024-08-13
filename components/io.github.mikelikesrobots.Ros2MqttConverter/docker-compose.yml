@@ -1,0 +1,21 @@
+services:
+  ros2-mqtt-converter:
+    image: "{ECR_REPO}/ros2-mqtt-converter:latest"
+    container_name: converter
+    environment:
+      - SVCUID
+      - AWS_GG_NUCLEUS_DOMAIN_SOCKET_FILEPATH_FOR_COMPONENT
+      - ROS2_TOPICS
+    volumes:
+      - ${AWS_GG_NUCLEUS_DOMAIN_SOCKET_FILEPATH_FOR_COMPONENT}:${AWS_GG_NUCLEUS_DOMAIN_SOCKET_FILEPATH_FOR_COMPONENT}
+    command: ros2 run ros2_mqtt_converter converter
+
+  robot-1:
+    image: "{ECR_REPO}/aws-iot-robot-connectivity-samples-ros2:latest"
+    command: ros2 run telemetry_mqtt mock_telemetry_pub --ros-args -r __ns:=/robot1
+  robot-2:
+    image: "{ECR_REPO}/aws-iot-robot-connectivity-samples-ros2:latest"
+    command: ros2 run telemetry_mqtt mock_telemetry_pub --ros-args -r __ns:=/robot2
+  robot-3:
+    image: "{ECR_REPO}/aws-iot-robot-connectivity-samples-ros2:latest"
+    command: ros2 run telemetry_mqtt mock_telemetry_pub --ros-args -r __ns:=/robot3

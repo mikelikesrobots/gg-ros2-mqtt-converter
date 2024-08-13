@@ -1,0 +1,26 @@
+{
+    "aws.greengrass.Nucleus": {
+        "componentVersion": "2.12.6"
+    },
+    "aws.greengrass.Cli": {
+        "componentVersion": "2.12.6"
+    },
+    "aws.greengrass.clientdevices.mqtt.EMQX": {
+        "componentVersion": "2.0.1"
+    },
+    "aws.greengrass.clientdevices.mqtt.Bridge": {
+        "componentVersion": "2.3.2",
+        "configurationUpdate": {
+            "merge": "{\"mqttTopicMapping\": {\"ForwardROS2\": {\"topic\": \"/robots/#\",\"source\": \"PubSub\",\"target\": \"IotCore\"}} }"
+        }
+    },
+    "aws.greengrass.DockerApplicationManager": {
+        "componentVersion": "2.0.11"
+    },
+    "io.github.mikelikesrobots.Ros2MqttConverter": {
+        "componentVersion": "1.0.0",
+        "configurationUpdate": {
+            "merge": "{\"ROS2_TOPICS\": [\"/robot1/mock_telemetry\", \"/robot2/mock_telemetry\", \"/robot3/mock_telemetry\"] }"
+        }
+    }
+}

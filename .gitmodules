@@ -1,0 +1,3 @@
+[submodule "docker/aws-iot-robot-connectivity-samples-ros2/aws-iot-robot-connectivity-samples-ros2"]
+	path = docker/aws-iot-robot-connectivity-samples-ros2/aws-iot-robot-connectivity-samples-ros2
+	url = https://github.com/aws-samples/aws-iot-robot-connectivity-samples-ros2.git
