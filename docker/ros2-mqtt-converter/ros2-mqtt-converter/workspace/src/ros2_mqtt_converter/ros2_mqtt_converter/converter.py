@@ -16,11 +16,9 @@ class Ros2MqttConverter(Node):
         self._ipc_client = GreengrassCoreIPCClientV2()
 
         self._timer = self.create_timer(5, self._on_timer)
-        # Config will be a JSON escaped string of topics
-        escaped_config = os.environ.get("ROS2_TOPICS", r"\"[\"]")
-        inner_config = json.loads(escaped_config)
-        self._config = json.loads(inner_config)
-        self.get_logger().info("Got config: {}".format(self._config))
+        raw_config = os.environ.get("ROS2_TOPICS", r"\"[\"]")
+        self._config = json.loads(raw_config)
+        self.get_logger().info("Loading config: {}".format(self._config))
 
         self._dynamic_subscriptions = {}
         self._update_subscriptions()
@@ -49,7 +47,7 @@ class Ros2MqttConverter(Node):
         ordered_dict = message_to_ordereddict(msg)
         mqtt_msg = json.dumps(ordered_dict)
 
-        self.get_logger().info("Publishing on topic {} with message {}".format(mqtt_topic, mqtt_msg))
+        self.get_logger().debug("Publishing on topic {} with message {}".format(mqtt_topic, mqtt_msg))
 
         binary_message = BinaryMessage(message=bytes(mqtt_msg, "utf-8"))
         publish_message = PublishMessage(binary_message=binary_message)

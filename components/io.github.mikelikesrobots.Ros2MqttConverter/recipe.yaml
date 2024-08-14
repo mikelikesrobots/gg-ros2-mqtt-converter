@@ -32,5 +32,5 @@ Manifests:
       Run: 
         RequiresPrivilege: True
         Script: |
-          ROS2_TOPICS=$(jq -R -s '.' <<< '{configuration:/ROS2_TOPICS}') \
+          ROS2_TOPICS='{configuration:/ROS2_TOPICS}' \
           docker compose -f {artifacts:decompressedPath}/io.github.mikelikesrobots.Ros2MqttConverter/docker-compose.yml up
